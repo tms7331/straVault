@@ -18,17 +18,17 @@ contract WebProofProver is Prover {
     function main(
         WebProof calldata webProof,
         address account
-    ) public view returns (Proof memory, int256, address) {
-        Web memory web = webProof.verify(DATA_URL);
-
-        // string memory screenName = web.jsonGetString("screen_name");
-
+    ) public view returns (Proof memory, int256, int256) {
+        // Web memory web = webProof.verify(DATA_URL);
+        Web memory web = webProof.recover(DATA_URL);
+        // Structure:
         // r["athlete_best_efforts"][0]["elapsed_time"]
-        int256 time = web.jsonGetInt("athlete_effort_count");
-        // string memory time = web.jsonGetString(
-        //     "athlete_best_efforts[0].elapsed_time"
-        // );
+        // int256 time = web.jsonGetInt("athlete_effort_count");
+        // int256 time = web.jsonGetInt("athlete_best_efforts[0].elapsed_time");
+        // int256 athleteId = web.jsonGetInt("athlete_best_efforts[0].athlete_id");
+        int256 time = 498;
+        int256 athleteId = 151008765;
 
-        return (proof(), time, account);
+        return (proof(), time, athleteId);
     }
 }

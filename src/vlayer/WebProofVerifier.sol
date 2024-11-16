@@ -2,31 +2,57 @@
 pragma solidity ^0.8.13;
 
 import {WebProofProver} from "./WebProofProver.sol";
-
 import {Proof} from "vlayer-0.1.0/Proof.sol";
 import {Verifier} from "vlayer-0.1.0/Verifier.sol";
 
-import {ERC721} from "@openzeppelin-contracts-5.0.1/token/ERC721/ERC721.sol";
-
-contract WebProofVerifier is Verifier, ERC721 {
+contract WebProofVerifier is Verifier {
     address public prover;
+    // Values for the proof
+    address public successAddress;
+    address public failureAddress;
+    int256 public athleteId;
+    int256 public maxTime;
+    uint256 public deadline;
 
-    constructor(address _prover) ERC721("TwitterNFT", "TNFT") {
+    constructor(
+        address _prover,
+        address _successAddress,
+        address _failureAddress,
+        int256 _athleteId,
+        int256 _maxTime,
+        uint256 _deadline
+    ) {
         prover = _prover;
+        successAddress = _successAddress;
+        failureAddress = _failureAddress;
+        athleteId = _athleteId;
+        maxTime = _maxTime;
+        deadline = _deadline;
+    }
+
+    function timeoutClaim() public {
+        // If the deadline has passed, anyone can call this function to send funds to the failureAddress
+        require(block.timestamp > deadline, "Deadline not reached");
+        (bool success, ) = failureAddress.call{value: address(this).balance}(
+            ""
+        );
+        require(success, "Failed to send Ether");
     }
 
     function verify(
         Proof calldata,
         int256 time,
-        address account
+        int256 athleteId
     ) public onlyVerified(prover, WebProofProver.main.selector) {
-        // uint256 tokenId = uint256(keccak256(abi.encodePacked(time)));
-        // require(
-        //     _ownerOf(tokenId) == address(0),
-        //     "User has already minted a TwitterNFT"
-        // );
+        // If proof is valid, send funds to successAddress
+        require(time <= maxTime, "Time is greater than maxTime");
+        require(athleteId == athleteId, "Athlete ID does not match");
 
-        uint256 tokenId = 0;
-        _safeMint(account, tokenId);
+        (bool success, ) = successAddress.call{value: address(this).balance}(
+            ""
+        );
+        require(success, "Failed to send Ether");
     }
+
+    fallback() external payable {}
 }

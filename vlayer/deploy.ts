@@ -6,9 +6,34 @@ import {
   getConfig,
 } from "@vlayer/sdk/config";
 
+
+/*
+address _successAddress,
+address _failureAddress,
+int256 _athleteId,
+int256 _maxTime,
+uint256 _deadline
+*/
+
+const successAddress = "0x0000000000000000000000000000000000000123";
+const failureAddress = "0x0000000000000000000000000000000000000124";
+const maxTime = 500;
+const athleteId = 151008765;
+// One week from now
+const deadline = 1732379995;
+
+const verifierArgs = [
+  successAddress,
+  failureAddress,
+  athleteId,
+  maxTime,
+  deadline
+];
+
 const { prover, verifier } = await deployVlayerContracts({
   proverSpec,
   verifierSpec,
+  verifierArgs
 });
 
 const config = getConfig();
