@@ -15,8 +15,8 @@ int256 _maxTime,
 uint256 _deadline
 */
 
-const successAddress = "0x0000000000000000000000000000000000000123";
-const failureAddress = "0x0000000000000000000000000000000000000124";
+const successAddress = "0xC52178a1b28AbF7734b259c27956acBFd67d4636";
+const failureAddress = "0x0000000000000000000000000000000000000000";
 const maxTime = 500;
 const athleteId = 151008765;
 // One week from now
