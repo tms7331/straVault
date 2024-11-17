@@ -47,11 +47,7 @@ contract WebProofVerifier is Verifier {
         // If proof is valid, send funds to successAddress
         require(time <= maxTime, "Time is greater than maxTime");
         require(athleteId == athleteId, "Athlete ID does not match");
-
-        (bool success, ) = successAddress.call{value: address(this).balance}(
-            ""
-        );
-        require(success, "Failed to send Ether");
+        successAddress.call{value: address(this).balance}("");
     }
 
     fallback() external payable {}

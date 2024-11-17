@@ -23,11 +23,11 @@ contract WebProofProver is Prover {
         Web memory web = webProof.recover(DATA_URL);
         // Structure:
         // r["athlete_best_efforts"][0]["elapsed_time"]
-        // int256 time = web.jsonGetInt("athlete_effort_count");
-        // int256 time = web.jsonGetInt("athlete_best_efforts[0].elapsed_time");
-        // int256 athleteId = web.jsonGetInt("athlete_best_efforts[0].athlete_id");
-        int256 time = 498;
-        int256 athleteId = 151008765;
+        // Expecting:
+        // int256 time = 498;
+        // int256 athleteId = 151008765;
+        int256 time = web.jsonGetInt("athlete_best_efforts[0].elapsed_time");
+        int256 athleteId = web.jsonGetInt("athlete_best_efforts[0].athlete_id");
 
         return (proof(), time, athleteId);
     }
